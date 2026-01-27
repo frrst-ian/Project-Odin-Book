@@ -2,10 +2,16 @@ const passport = require("../config/passport");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const db = require("../db/queries");
+const { validationResult } = require("express-validator");
 
 async function postRegister(req, res) {
     try {
-        console.log("req.body:", req.body);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const messages = errors.array().map((err) => err.msg);
+            return res.status(400).json({ errors: messages });
+        }
+
         const { name, email, password } = req.body;
 
         saltedPassword = await bcrypt.hash(password, 12);
@@ -27,9 +33,9 @@ async function postRegister(req, res) {
             },
         });
     } catch (err) {
-        if (err.code === "P2002" && err.meta?.target?.includes("email")) {
+        if (err.code === "P2002") {
             return res.status(400).json({
-                errors: ["Email already exist"],
+                error: "Email already exist",
             });
         }
         console.error("Sign up error: ", err);
@@ -39,6 +45,12 @@ async function postRegister(req, res) {
 
 async function postLogin(req, res) {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            const messages = errors.array().map((err) => err.msg);
+            return res.status(400).json({ errors: messages });
+        }
+
         passport.authenticate(
             "local",
             { session: false },
