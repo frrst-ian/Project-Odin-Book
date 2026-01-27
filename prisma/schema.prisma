@@ -4,18 +4,17 @@ generator client {
 }
 
 datasource db {
-  url      = env("DATABASE_URL")
   provider = "postgresql"
 }
 
 model User {
   id             Int     @id @default(autoincrement())
   email          String  @unique
-  name           String?
+  name           String
   password       String
   profilePicture String?
   bio            String?
-  followers      Int
+  followers      Int @default(0)
   posts          Post[]
 }
 

@@ -1,0 +1,23 @@
+const prisma = require("../lib/prisma.js");
+
+async function createUser(name, email, password) {
+    return await prisma.user.create({
+        data: {
+            name: name,
+            email: email,
+            password: password,
+        },
+    });
+}
+
+async function getUserByEmail(email) {
+    return await prisma.user.findUnique({
+        where: { email: email },
+    });
+}
+
+async function getUserById(id) {
+    return await prisma.user.findUnique({ where: { id: id } });
+}
+
+module.exports = { createUser, getUserByEmail, getUserById };
