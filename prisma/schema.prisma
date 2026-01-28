@@ -11,10 +11,10 @@ model User {
   id             Int     @id @default(autoincrement())
   email          String  @unique
   name           String
-  password       String
+  password       String?
   profilePicture String?
   bio            String?
-  followers      Int @default(0)
+  followers      Int     @default(0)
   posts          Post[]
 }
 

@@ -55,4 +55,45 @@ passport.use(
     ),
 );
 
+passport.use(
+    new GithubStrategy(
+        {
+            clientID: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+            callbackURL: "http://localhost:3000/api/auth/github/callback",
+            scope: ["user:email"],
+            customLogic: async (accessToken, profile) => {
+                const emailsResponse = await require("axios").get(
+                    "https://api.github.com/user/emails",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    },
+                );
+                const primaryEmail = emailsResponse.data.find(
+                    (email) => email.primary,
+                )?.email;
+                profile.emails = [{ value: primaryEmail }];
+            },
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                const email = profile.emails[0].value;
+                const user = await db.getUserByEmail(email);
+                if (!user) {
+                    const user = await db.createUser(
+                        profile.displayName,
+                        email,
+                    );
+                }
+                return done(null, user);
+            } catch (err) {
+                console.error("Github auth err: ", err);
+                return done(err, false);
+            }
+        },
+    ),
+);
+
 module.exports = passport;

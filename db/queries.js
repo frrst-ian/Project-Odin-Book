@@ -10,6 +10,14 @@ async function createUser(name, email, password) {
     });
 }
 
+// async function upsertUser(name, email) {
+//     return await prisma.user.upsert({
+//         where: { email: email },
+//         update: {},
+//         create: { name: name, email: email },
+//     });
+// }
+
 async function getUserByEmail(email) {
     return await prisma.user.findUnique({
         where: { email: email },
