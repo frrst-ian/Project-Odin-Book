@@ -13,11 +13,19 @@ async function postRegister(req, res) {
             return res.status(400).json({ errors: messages });
         }
 
-        const { name, email, password } = req.body;
+        const { name, email, password, bio } = req.body;
 
         saltedPassword = await bcrypt.hash(password, 12);
 
-        const user = await db.createUser(name, email, saltedPassword);
+        const profilePicture = req.file.secure_url || req.file.path;
+
+        const user = await db.createUser(
+            name,
+            email,
+            saltedPassword,
+            bio,
+            profilePicture,
+        );
 
         const token = jwt.sign(
             { userId: user.id, email: user.email },
@@ -31,6 +39,8 @@ async function postRegister(req, res) {
                 id: user.id,
                 name: user.name,
                 email: user.email,
+                profilePicture: user.profilePicture,
+                bio: user.bio,
             },
         });
     } catch (err) {

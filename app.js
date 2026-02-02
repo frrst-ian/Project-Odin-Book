@@ -43,7 +43,7 @@ const userRouter = require("./routes/userRouter");
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
-app.use("/api/u", userRouter)
+app.use("/api/u", userRouter);
 
 app.listen(PORT, () => {
     console.log(`[${NODE_ENV}] App is listening on http://localhost:${PORT}`);

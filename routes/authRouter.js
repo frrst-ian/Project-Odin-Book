@@ -8,8 +8,9 @@ const {
 } = require("../validators/userValidator");
 const jwt = require("jsonwebtoken");
 const passport = require("../config/passport");
+const upload = require("../config/cloudinary")
 
-authRouter.post("/register", registerValidator, authController.postRegister);
+authRouter.post("/register", upload.single("profilePicture"),registerValidator, authController.postRegister);
 authRouter.post("/login", loginValidator, authController.postLogin);
 
 authRouter.get(
