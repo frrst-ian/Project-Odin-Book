@@ -7,6 +7,7 @@ const { validationResult } = require("express-validator");
 async function postRegister(req, res) {
     try {
         const errors = validationResult(req);
+
         if (!errors.isEmpty()) {
             const messages = errors.array().map((err) => err.msg);
             return res.status(400).json({ errors: messages });
@@ -35,7 +36,7 @@ async function postRegister(req, res) {
     } catch (err) {
         if (err.code === "P2002") {
             return res.status(400).json({
-                error: "Email already exist",
+                errors: ["Email already exist"],
             });
         }
         console.error("Sign up error: ", err);

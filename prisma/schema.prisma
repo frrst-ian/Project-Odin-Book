@@ -8,23 +8,29 @@ datasource db {
 }
 
 model User {
-  id             Int     @id @default(autoincrement())
-  email          String  @unique
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
   name           String
   password       String?
   profilePicture String?
   bio            String?
-  followers      Int     @default(0)
-  posts          Post[]
+  followers      Int      @default(0)
+  createdAt      DateTime @default(now())
+
+  posts Post[]
+
+  @@map("user")
 }
 
 model Post {
   id       Int       @id @default(autoincrement())
-  content  String?
+  content  String
   author   User      @relation(fields: [authorId], references: [id])
   authorId Int
   likes    Int
   comments Comment[]
+
+  @@map("post")
 }
 
 model Comment {
@@ -32,4 +38,6 @@ model Comment {
   content String
   post    Post   @relation(fields: [postId], references: [id])
   postId  Int
+
+  @@map("comment")
 }
