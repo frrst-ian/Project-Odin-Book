@@ -14,7 +14,7 @@ const getAllowedOrigins = () => {
             "http://localhost:5174",
         ];
     }
-    return ["https://messz.netlify.app"];
+    return ["https://odinbook.netlify.app"];
 };
 
 app.use(
@@ -40,10 +40,12 @@ app.use(
 
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
+const postRouter = require("./routes/postRouter");
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/u", userRouter);
+app.use("/api/p", postRouter);
 
 app.listen(PORT, () => {
     console.log(`[${NODE_ENV}] App is listening on http://localhost:${PORT}`);

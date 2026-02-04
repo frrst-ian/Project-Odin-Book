@@ -9,8 +9,11 @@ async function getUsers(req, res) {
 }
 
 async function getUserByID(req, res) {
-    const {id} = req.params;
-    const user = await db.getUserByID(parseInt(id))
+    const { id } = req.params;
+    const user = await db.getUserByID(parseInt(id));
+    if (user === null) {
+        return res.status(404).json({ error: "User doesn't exist" });
+    }
     return res.json(user);
 }
 

@@ -14,12 +14,24 @@ model User {
   password       String?
   profilePicture String?
   bio            String?
-  followers      Int      @default(0)
   createdAt      DateTime @default(now())
 
-  posts Post[]
+  posts     Post[]
+  likes     Like[]
+  following Follows[] @relation("following")
+  followedBy Follows[] @relation("followedBy")
 
   @@map("user")
+}
+
+model Follows {
+  following   User  @relation("following", fields: [followingId], references: [id])
+  followedBy   User  @relation("followedBy", fields: [followedById], references: [id])
+  followedById  Int
+  followingId Int
+
+  @@id([followedById, followingId])
+  @@map("follow")
 }
 
 model Post {
@@ -27,10 +39,20 @@ model Post {
   content  String
   author   User      @relation(fields: [authorId], references: [id])
   authorId Int
-  likes    Int
   comments Comment[]
+  likes    Like[]
 
   @@map("post")
+}
+
+model Like {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+  post   Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@map("likes")
 }
 
 model Comment {
@@ -41,3 +63,5 @@ model Comment {
 
   @@map("comment")
 }
+
+

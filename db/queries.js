@@ -37,11 +37,18 @@ async function getUsers(searchQuery, userID) {
     });
 }
 
-async function getAllPost() {}
+async function getPosts() {
+    return await prisma.post.findMany({
+        include: { likes: true, comments: true },
+    });
+}
 
-async function getPostByUserID() {}
-
-async function getPostByID() {}
+async function getPostByID(postID) {
+    return await prisma.post.findUnique({
+        where: { id: postID },
+        include: { likes: true, comments: true },
+    });
+}
 
 async function getCommentsByPostID() {}
 
@@ -49,4 +56,11 @@ async function getLikesByPostID() {}
 
 async function getUserFollowersByID() {}
 
-module.exports = { createUser, getUserByEmail, getUserByID, getUsers };
+module.exports = {
+    createUser,
+    getUserByEmail,
+    getUserByID,
+    getUsers,
+    getPosts,
+    getPostByID,
+};
