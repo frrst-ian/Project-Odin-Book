@@ -1,5 +1,12 @@
 const db = require("../db/queries");
 
+async function getUserProfile(req, res) {
+    if (req.user) {
+        console.log("User: ", req.user);
+        return res.json(req.user);
+    }
+}
+
 async function getUsers(req, res) {
     const userID = req.user.id;
     const { searchQuery } = req.query;
@@ -17,4 +24,4 @@ async function getUserByID(req, res) {
     return res.json(user);
 }
 
-module.exports = { getUsers, getUserByID };
+module.exports = { getUsers, getUserByID, getUserProfile };

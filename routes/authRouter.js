@@ -8,9 +8,14 @@ const {
 } = require("../validators/userValidator");
 const jwt = require("jsonwebtoken");
 const passport = require("../config/passport");
-const upload = require("../config/cloudinary")
+const upload = require("../config/cloudinary");
 
-authRouter.post("/register", upload.single("profilePicture"),registerValidator, authController.postRegister);
+authRouter.post(
+    "/register",
+    upload.single("profilePicture"),
+    registerValidator,
+    authController.postRegister,
+);
 authRouter.post("/login", loginValidator, authController.postLogin);
 
 authRouter.get(
@@ -31,14 +36,8 @@ authRouter.get(
                 process.env.JWT_SECRET,
                 { expiresIn: "7d" },
             );
-            return res.status(201).json({
-                token,
-                user: {
-                    id: req.user.id,
-                    name: req.user.name,
-                    email: req.user.email,
-                },
-            });
+
+            res.redirect(`http://localhost:5173/auth/callback?token=${token}`);
         } catch (err) {
             console.error("JWT generation error:", err);
             res.status(500).json({ message: "Failed to generate token" });
