@@ -46,15 +46,56 @@ async function getPosts() {
 async function getPostByID(postID) {
     return await prisma.post.findUnique({
         where: { id: postID },
-        include: { likes: true, comments: true },
+        include: {
+            _count: { select: { likes: true } },
+            comments: true,
+            author: {
+                select: {
+                    id: true,
+                    email: true,
+                    name: true,
+                    profilePicture: true,
+                },
+            },
+        },
     });
 }
 
-async function getCommentsByPostID() {}
+async function createPost(content, postImage, userID) {
+    return await prisma.post.create({
+        data: {
+            content: content,
+            postImage: postImage,
+            authorId: userID,
+        },
+    });
+}
 
-async function getLikesByPostID() {}
+async function createComment(content, userID, postID) {
+    return await prisma.comment.create({
+        data: {
+            content,
+            authorId: userID,
+            postId: postID,
+        },
+    });
+}
 
-async function getUserFollowersByID() {}
+async function getPostComments(postID) {
+    return await prisma.comment.findMany({
+        where: { postId: postID },
+        include: {
+            author: {
+                select: {
+                    name: true,
+                    profilePicture: true,
+                },
+            },
+        },
+    });
+}
+
+async function getUserFollowers() {}
 
 module.exports = {
     createUser,
@@ -63,4 +104,7 @@ module.exports = {
     getUsers,
     getPosts,
     getPostByID,
+    createPost,
+    createComment,
+    getPostComments,
 };

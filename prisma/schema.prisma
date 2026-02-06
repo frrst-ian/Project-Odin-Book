@@ -20,6 +20,7 @@ model User {
   likes     Like[]
   following Follows[] @relation("following")
   followedBy Follows[] @relation("followedBy")
+  comments Comment[]
 
   @@map("user")
 }
@@ -30,17 +31,20 @@ model Follows {
   followedById  Int
   followingId Int
 
+  followedAt DateTime @default(now())
   @@id([followedById, followingId])
   @@map("follow")
 }
 
 model Post {
-  id       Int       @id @default(autoincrement())
-  content  String
-  author   User      @relation(fields: [authorId], references: [id])
-  authorId Int
-  comments Comment[]
-  likes    Like[]
+  id        Int       @id @default(autoincrement())
+  content   String
+  postImage String?
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  Int
+  comments  Comment[]
+  likes     Like[]
+  createdAt DateTime @default(now())
 
   @@map("post")
 }
@@ -51,17 +55,19 @@ model Like {
   userId Int
   post   Post @relation(fields: [postId], references: [id])
   postId Int
+  createdAt DateTime @default(now())
 
   @@map("likes")
 }
 
 model Comment {
-  id      Int    @id @default(autoincrement())
-  content String
-  post    Post   @relation(fields: [postId], references: [id])
-  postId  Int
+  id        Int      @id @default(autoincrement())
+  content   String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  createdAt DateTime @default(now())
 
   @@map("comment")
 }
-
-
