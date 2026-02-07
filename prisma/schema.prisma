@@ -44,20 +44,20 @@ model Post {
   author    User      @relation(fields: [authorId], references: [id])
   authorId  Int
   comments  Comment[]
-  likes     Like[]
+  likes     Like[] 
   createdAt DateTime @default(now())
 
   @@map("post")
 }
 
 model Like {
-  id     Int  @id @default(autoincrement())
   user   User @relation(fields: [userId], references: [id])
-  userId Int
+  userId Int 
   post   Post @relation(fields: [postId], references: [id])
   postId Int
   createdAt DateTime @default(now())
 
+  @@id([userId,postId])
   @@map("likes")
 }
 

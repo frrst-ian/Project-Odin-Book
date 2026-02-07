@@ -70,10 +70,38 @@ async function createComment(req, res) {
     }
 }
 
+async function likePost(req, res) {
+    try {
+        const { id } = req.params;
+        const userID = parseInt(req.user.id);
+
+        await db.likePost(parseInt(id), userID);
+        return res.json({ message: "post liked" });
+    } catch (err) {
+        console.error("Error creating comment ", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+async function unLikePost(req, res) {
+    try {
+        const { id } = req.params;
+        const userID = parseInt(req.user.id);
+
+        await db.unLikePost(parseInt(id), userID);
+        return res.json({ message: "post unliked" });
+    } catch (err) {
+        console.error("Error creating comment ", err);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+}
+
 module.exports = {
     getPosts,
     getPostByID,
     createPost,
     createComment,
     getPostComments,
+    likePost,
+    unLikePost,
 };

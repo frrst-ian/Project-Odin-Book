@@ -171,6 +171,24 @@ async function unFollowUser(userID, otherUserID) {
     });
 }
 
+async function likePost(postID, userID) {
+    return await prisma.like.create({
+        data: {
+            postId: postID,
+            userId: userID,
+        },
+    });
+}
+
+async function unLikePost(postID, userID) {
+    return await prisma.like.deleteMany({
+        where: {
+            postId: postID,
+            userId: userID,
+        },
+    });
+}
+
 module.exports = {
     createUser,
     getUserByEmail,
@@ -185,4 +203,6 @@ module.exports = {
     getUserFollowing,
     followUser,
     unFollowUser,
+    unLikePost,
+    likePost,
 };

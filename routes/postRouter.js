@@ -14,5 +14,7 @@ postRouter.post(
     authenticateJwt,
     postController.createPost,
 );
+postRouter.post("/:id/l", authenticateJwt, postController.likePost);
+postRouter.post("/:id/ul", authenticateJwt, postController.unLikePost);
 
 module.exports = postRouter;
