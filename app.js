@@ -9,10 +9,7 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 
 const getAllowedOrigins = () => {
     if (NODE_ENV === "development") {
-        return [
-            "http://localhost:5173",
-            "http://localhost:5174",
-        ];
+        return ["http://localhost:5173", "http://localhost:5174"];
     }
     return ["https://odinbook.netlify.app"];
 };
@@ -37,15 +34,16 @@ app.use(
     }),
 );
 
-
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const postRouter = require("./routes/postRouter");
+const followRouter = require("./routes/followRouter");
 
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/u", userRouter);
 app.use("/api/p", postRouter);
+app.use("/api/f", followRouter);
 
 app.listen(PORT, () => {
     console.log(`[${NODE_ENV}] App is listening on http://localhost:${PORT}`);

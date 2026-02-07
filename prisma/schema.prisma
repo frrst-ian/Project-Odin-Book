@@ -18,22 +18,23 @@ model User {
 
   posts     Post[]
   likes     Like[]
-  following Follows[] @relation("following")
-  followedBy Follows[] @relation("followedBy")
+  following Follows[] @relation("followedBy")
+  followedBy Follows[] @relation("following")
   comments Comment[]
 
   @@map("user")
 }
 
 model Follows {
-  following   User  @relation("following", fields: [followingId], references: [id])
-  followedBy   User  @relation("followedBy", fields: [followedById], references: [id])
+
+  following   User?  @relation("following", fields: [followingId], references: [id])
+  followedBy   User?  @relation("followedBy", fields: [followedById], references: [id])
   followedById  Int
   followingId Int
 
   followedAt DateTime @default(now())
   @@id([followedById, followingId])
-  @@map("follow")
+  @@map("follows")
 }
 
 model Post {

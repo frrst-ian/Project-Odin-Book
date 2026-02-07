@@ -95,7 +95,81 @@ async function getPostComments(postID) {
     });
 }
 
-async function getUserFollowers() {}
+async function getUserFollowers(userID) {
+    return await prisma.user.findMany({
+        where: { id: userID },
+        include: {
+            followedBy: {
+                select: {
+                    followedBy: {
+                        select: {
+                            email: false,
+                            password: false,
+                            bio: false,
+                            createdAt: false,
+                            name: true,
+                            profilePicture: true,
+                        },
+                    },
+                },
+            },
+            email: false,
+            password: false,
+            bio: false,
+            createdAt: false,
+            name: false,
+            id: false,
+            profilePicture: false,
+        },
+    });
+}
+
+async function getUserFollowing(userID) {
+    return await prisma.user.findMany({
+        where: { id: userID },
+        include: {
+            following: {
+                select: {
+                    following: {
+                        select: {
+                            email: false,
+                            password: false,
+                            bio: false,
+                            createdAt: false,
+                            name: true,
+                            profilePicture: true,
+                        },
+                    },
+                },
+            },
+            email: false,
+            password: false,
+            bio: false,
+            createdAt: false,
+            name: false,
+            id: false,
+            profilePicture: false,
+        },
+    });
+}
+
+async function followUser(userID, otherUserID) {
+    return await prisma.follows.create({
+        data: {
+            followedById: otherUserID,
+            followingId: userID,
+        },
+    });
+}
+
+async function unFollowUser(userID, otherUserID) {
+    return await prisma.follows.deleteMany({
+        where: {
+            followedById: userID,
+            followingId: otherUserID,
+        },
+    });
+}
 
 module.exports = {
     createUser,
@@ -107,4 +181,8 @@ module.exports = {
     createPost,
     createComment,
     getPostComments,
+    getUserFollowers,
+    getUserFollowing,
+    followUser,
+    unFollowUser,
 };

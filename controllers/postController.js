@@ -7,7 +7,7 @@ async function getPosts(req, res) {
         return res.json(posts);
     } catch (err) {
         console.error("Cannot get posts ", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -23,7 +23,7 @@ async function getPostByID(req, res) {
         return res.json(post);
     } catch (err) {
         console.error("Error getting post ", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -38,7 +38,7 @@ async function createPost(req, res) {
         return res.status(201).json(newPost);
     } catch (err) {
         console.error("Error creating post ", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -49,7 +49,7 @@ async function getPostComments(req, res) {
         return res.json(postComments);
     } catch (err) {
         console.error("Error getting post comments", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -66,7 +66,7 @@ async function createComment(req, res) {
         return res.status(201).json(newComment);
     } catch (err) {
         console.error("Error creating comment ", err);
-        res.status(500).json({ error: "Internal server error" });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
