@@ -15,7 +15,7 @@ async function postRegister(req, res) {
 
         const { name, email, password, bio } = req.body;
 
-        saltedPassword = await bcrypt.hash(password, 12);
+        const saltedPassword = await bcrypt.hash(password, 12);
 
         const profilePicture = req.file.secure_url || req.file.path;
 

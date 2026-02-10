@@ -31,7 +31,13 @@ async function getUsers(searchQuery, userID) {
             id: { not: userID },
             name: { contains: searchQuery, mode: "insensitive" },
         },
-        select: { id: true, name: true, profilePicture: true },
+        select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            following: true,
+            followedBy: true,
+        },
         orderBy: { createdAt: "desc" },
         take: 5,
     });
@@ -103,6 +109,7 @@ async function getUserFollowers(userID) {
                 select: {
                     followedBy: {
                         select: {
+                            id:true,
                             email: false,
                             password: false,
                             bio: false,
@@ -132,6 +139,7 @@ async function getUserFollowing(userID) {
                 select: {
                     following: {
                         select: {
+                            id:true,
                             email: false,
                             password: false,
                             bio: false,
@@ -156,8 +164,8 @@ async function getUserFollowing(userID) {
 async function followUser(userID, otherUserID) {
     return await prisma.follows.create({
         data: {
-            followedById: otherUserID,
-            followingId: userID,
+            followedById: userID,
+            followingId: otherUserID,
         },
     });
 }

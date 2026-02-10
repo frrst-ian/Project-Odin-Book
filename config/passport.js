@@ -1,6 +1,7 @@
 const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const db = require("../db/queries");
+const crypto = require('crypto');
 const LocalStrategy = require("passport-local").Strategy;
 const GithubStrategy = require("passport-github2").Strategy;
 const JwtStrategy = require("passport-jwt").Strategy;
@@ -80,11 +81,21 @@ passport.use(
         async (accessToken, refreshToken, profile, done) => {
             try {
                 const email = profile.emails[0].value;
+                console.log(profile)
                 const user = await db.getUserByEmail(email);
+                const profilePicture = profile._json.avatar_url;
+                const randomPassword =  crypto.randomBytes(Math.ceil(32 / 2)).toString('hex').slice(0, 32);
+                console.log("random pass:" , randomPassword)
+                const saltedPassword = await bcrypt.hash(randomPassword, 12)
+                console.log("salted pass:" , saltedPassword)
+
                 if (!user) {
                     const user = await db.createUser(
                         profile.displayName,
                         email,
+                        saltedPassword,
+                        bio=null,
+                        profilePicture
                     );
                 }
                 return done(null, user);
