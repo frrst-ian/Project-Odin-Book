@@ -102,63 +102,39 @@ async function getPostComments(postID) {
 }
 
 async function getUserFollowers(userID) {
-    return await prisma.user.findMany({
-        where: { id: userID },
-        include: {
+    const followedBy = await prisma.follows.findMany({
+        where: { followingId: userID },
+        select: {
             followedBy: {
                 select: {
-                    followedBy: {
-                        select: {
-                            id:true,
-                            email: false,
-                            password: false,
-                            bio: false,
-                            createdAt: false,
-                            name: true,
-                            profilePicture: true,
-                        },
-                    },
+                    id: true,
+                    name: true,
+                    profilePicture: true,
                 },
             },
-            email: false,
-            password: false,
-            bio: false,
-            createdAt: false,
-            name: false,
-            id: false,
-            profilePicture: false,
         },
     });
+
+    return followedBy.map((f) => f.followedBy);
 }
 
 async function getUserFollowing(userID) {
-    return await prisma.user.findMany({
-        where: { id: userID },
-        include: {
+    const follows = await prisma.follows.findMany({
+        where: {
+            followedById: userID,
+        },
+        select: {
             following: {
                 select: {
-                    following: {
-                        select: {
-                            id:true,
-                            email: false,
-                            password: false,
-                            bio: false,
-                            createdAt: false,
-                            name: true,
-                            profilePicture: true,
-                        },
-                    },
+                    id: true,
+                    name: true,
+                    profilePicture: true,
                 },
             },
-            email: false,
-            password: false,
-            bio: false,
-            createdAt: false,
-            name: false,
-            id: false,
-            profilePicture: false,
         },
     });
+
+    return follows.map((f) => f.following);
 }
 
 async function followUser(userID, otherUserID) {

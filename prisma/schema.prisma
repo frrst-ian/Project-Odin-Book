@@ -26,7 +26,6 @@ model User {
 }
 
 model Follows {
-
   following   User?  @relation("following", fields: [followingId], references: [id])
   followedBy   User?  @relation("followedBy", fields: [followedById], references: [id])
   followedById  Int

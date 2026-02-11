@@ -2,7 +2,7 @@ const db = require("../db/queries");
 
 async function getUserFollowers(req, res) {
     try {
-        const { id } = req.user;
+        const { id } = req.params;
         const followers = await db.getUserFollowers(parseInt(id));
 
         return res.json(followers);
