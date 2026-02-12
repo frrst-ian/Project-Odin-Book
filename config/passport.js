@@ -22,7 +22,7 @@ passport.use(
                     });
                 }
 
-                const match = await bcrypt.compare(password, user.password);
+                const match = bcrypt.compare(password, user.password);
                 if (!match) {
                     return done(null, false, {
                         error: "Incorrect password",
@@ -37,6 +37,7 @@ passport.use(
     ),
 );
 
+// Passport JWT Strategy
 passport.use(
     new JwtStrategy(
         {
@@ -90,7 +91,6 @@ passport.use(
                     .toString("hex")
                     .slice(0, 32);
                 const saltedPassword = await bcrypt.hash(randomPassword, 12);
-
                 if (!user) {
                     const user = await db.createUser(
                         profile.displayName,
@@ -99,7 +99,9 @@ passport.use(
                         (bio = null),
                         profilePicture,
                     );
+                    return done(null, user);
                 }
+
                 return done(null, user);
             } catch (err) {
                 console.error("Github auth err: ", err);

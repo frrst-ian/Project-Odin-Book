@@ -44,9 +44,23 @@ async function getUsers(searchQuery, userID) {
 }
 
 async function getPosts() {
-    return await prisma.post.findMany({
-        include: { likes: true, comments: true },
+    const posts = await prisma.post.findMany({
+        include: {
+            likes: true,
+            author: {
+                select: {
+                    name: true,
+                    profilePicture: true,
+                },
+            },
+        },
     });
+
+    return posts.map(({ author, ...rest }) => ({
+        ...rest,
+        name: author.name,
+        profilePicture: author.profilePicture,
+    }));
 }
 
 async function getPostByID(postID) {
