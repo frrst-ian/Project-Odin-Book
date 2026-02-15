@@ -46,27 +46,35 @@ async function getUsers(searchQuery, userID) {
 async function getPosts() {
     const posts = await prisma.post.findMany({
         include: {
-            likes: true,
+            _count: { select: { likes: true } },
             author: {
                 select: {
                     name: true,
                     profilePicture: true,
                 },
             },
+            likes: {
+                select: {
+                    userId: true,
+                },
+            },
         },
     });
 
-    return posts.map(({ author, ...rest }) => ({
+    return posts.map(({ _count, likes, author, ...rest }) => ({
         ...rest,
         name: author.name,
         profilePicture: author.profilePicture,
+        likesCount: _count.likes,
+        likes: likes.map((like) => like.userId),
     }));
 }
 
 async function getPostByID(postID) {
-    return await prisma.post.findUnique({
+    const post = await prisma.post.findUnique({
         where: { id: postID },
         include: {
+            likes: { select: { userId: true } },
             _count: { select: { likes: true } },
             comments: true,
             author: {
@@ -79,6 +87,14 @@ async function getPostByID(postID) {
             },
         },
     });
+
+    const formattedPost = {
+        ...post,
+        likes: post.likes.map((like) => like.userId),
+        likesCount: post._count.likes,
+    };
+
+    return formattedPost;
 }
 
 async function createPost(content, postImage, userID) {

@@ -70,13 +70,13 @@ async function postLogin(req, res) {
                     console.error(err);
                     return res
                         .status(500)
-                        .json({ error: "Incorrect email or password" });
+                        .json({ errors: "Incorrect email or password" });
                 }
 
                 if (!user) {
                     return res
                         .status(401)
-                        .json({ error: "Incorrect email or password" });
+                        .json({ errors: "Incorrect email or password" });
                 }
 
                 const token = jwt.sign(
@@ -96,6 +96,7 @@ async function postLogin(req, res) {
             },
         )(req, res);
     } catch (err) {
+        console.error("Error:", err);
         return res.status(500).json({ error: "Internal server error" });
     }
 }

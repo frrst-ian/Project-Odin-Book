@@ -72,10 +72,10 @@ async function createComment(req, res) {
 
 async function likePost(req, res) {
     try {
-        const { id } = req.params;
+        const { postId } = req.body;
         const userID = parseInt(req.user.id);
 
-        await db.likePost(parseInt(id), userID);
+        await db.likePost(parseInt(postId), userID);
         return res.json({ message: "post liked" });
     } catch (err) {
         console.error("Error creating comment ", err);
@@ -85,10 +85,10 @@ async function likePost(req, res) {
 
 async function unLikePost(req, res) {
     try {
-        const { id } = req.params;
+        const { postId } = req.body;
         const userID = parseInt(req.user.id);
 
-        await db.unLikePost(parseInt(id), userID);
+        await db.unLikePost(parseInt(postId), userID);
         return res.json({ message: "post unliked" });
     } catch (err) {
         console.error("Error creating comment ", err);
