@@ -31,7 +31,7 @@ async function createPost(req, res) {
     try {
         const userId = parseInt(req.user.id);
         const { content } = req.body;
-        const postImage = req.file.secure_url || req.file.path;
+        const postImage = req.file?.path || null;
 
         const newPost = await db.createPost(content, postImage, userId);
 

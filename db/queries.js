@@ -59,12 +59,11 @@ async function getPosts() {
                 },
             },
         },
+        orderBy: { createdAt: "desc" },
     });
 
-    return posts.map(({ _count, likes, author, ...rest }) => ({
+    return posts.map(({ _count, likes, ...rest }) => ({
         ...rest,
-        name: author.name,
-        profilePicture: author.profilePicture,
         likesCount: _count.likes,
         likes: likes.map((like) => like.userId),
     }));
@@ -75,8 +74,20 @@ async function getPostByID(postID) {
         where: { id: postID },
         include: {
             likes: { select: { userId: true } },
-            _count: { select: { likes: true } },
-            comments: true,
+            _count: { select: { likes: true, comments: true } },
+            comments: {
+                select: {
+                    author: {
+                        select: {
+                            name: true,
+                            profilePicture: true,
+                        },
+                    },
+                    content: true,
+                    createdAt: true,
+                    id: true,
+                },
+            },
             author: {
                 select: {
                     id: true,
@@ -104,6 +115,15 @@ async function createPost(content, postImage, userID) {
             postImage: postImage,
             authorId: userID,
         },
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    name: true,
+                    profilePicture: true,
+                },
+            },
+        },
     });
 }
 
@@ -113,6 +133,15 @@ async function createComment(content, userID, postID) {
             content,
             authorId: userID,
             postId: postID,
+        },
+        include: {
+            author: {
+                select: {
+                    id: true,
+                    name: true,
+                    profilePicture: true,
+                },
+            },
         },
     });
 }

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 
 const app = express();
 
@@ -44,6 +45,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/u", userRouter);
 app.use("/api/p", postRouter);
 app.use("/api/f", followRouter);
+
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        return res.status(400).j(`File upload error: ${err.message}`);
+    }
+    res.status(500).send({ errors: [err.message] });
+});
 
 app.listen(PORT, () => {
     console.log(`[${NODE_ENV}] App is listening on http://localhost:${PORT}`);

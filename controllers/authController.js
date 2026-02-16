@@ -91,6 +91,7 @@ async function postLogin(req, res) {
                         id: user.id,
                         name: user.name,
                         email: user.email,
+                        profilePicture: user.profilePicture,
                     },
                 });
             },

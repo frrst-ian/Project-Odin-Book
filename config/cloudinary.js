@@ -48,7 +48,7 @@ upload.errorHandler = (err, req, res, next) => {
   console.error('Upload error:', err);
   res.status(400).json({
     success: false,
-    message: err.message
+    error: err.message
   });
 };
 
