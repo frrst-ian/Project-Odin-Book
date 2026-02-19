@@ -15,6 +15,19 @@ async function getUserFollowers(req, res) {
 
 async function getUserFollowing(req, res) {
     try {
+        const { id } = req.params;
+        const following = await db.getUserFollowing(parseInt(id));
+
+        return res.json(following);
+    } catch (err) {
+        console.error("Error getting following: ", err);
+
+        return res.status(500).json("Internal Server Error");
+    }
+}
+
+async function getCurrentUserFollowing(req, res) {
+    try {
         const { id } = req.user;
         const following = await db.getUserFollowing(parseInt(id));
 
@@ -55,4 +68,5 @@ module.exports = {
     getUserFollowing,
     followUser,
     unFollowUser,
+    getCurrentUserFollowing
 };

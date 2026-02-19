@@ -21,7 +21,15 @@ async function getUserByEmail(email) {
 async function getUserByID(id) {
     return await prisma.user.findUnique({
         where: { id: id },
-        select: { id: true, name: true, profilePicture: true, bio: true },
+        select: {
+            id: true,
+            name: true,
+            profilePicture: true,
+            bio: true,
+            _count: {
+                select: { following: true, followedBy: true },
+            },
+        },
     });
 }
 
@@ -39,7 +47,7 @@ async function getUsers(searchQuery, userID) {
             followedBy: true,
         },
         orderBy: { createdAt: "desc" },
-        take: 5,
+        take: 10,
     });
 }
 
@@ -182,7 +190,7 @@ async function getUserFollowing(userID) {
         where: {
             followedById: userID,
         },
-        select: {
+        include: {
             following: {
                 select: {
                     id: true,

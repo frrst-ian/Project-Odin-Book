@@ -1,5 +1,7 @@
 require("dotenv").config();
 const { Router } = require("express");
+const { v4: uuidv4 } = require("uuid");
+
 const authRouter = Router();
 const authController = require("../controllers/authController");
 const {
@@ -44,5 +46,28 @@ authRouter.get(
         }
     },
 );
+
+// Guest login 
+authRouter.post("/guest", (req, res) => {
+    const guestId = `guest_${uuidv4()}`;
+
+    const token = jwt.sign(
+        { userId: guestId, email: null, isGuest: true },
+        process.env.JWT_SECRET,
+        { expiresIn: "24h" }
+    );
+
+    return res.json({
+        token,
+        user: {
+            id: guestId,
+            name: "Guest User",
+            email: null,
+            profilePicture: "https://api.dicebear.com/9.x/fun-emoji/svg?seed=Felix",
+            isGuest: true,
+        },
+    });
+});
+
 
 module.exports = authRouter;
