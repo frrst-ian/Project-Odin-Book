@@ -12,7 +12,7 @@ const getAllowedOrigins = () => {
     if (NODE_ENV === "development") {
         return ["http://localhost:5173", "http://localhost:5174"];
     }
-    return ["https://odinbook.netlify.app"];
+    return ["https://odinbookxd.netlify.app"];
 };
 
 app.use(
