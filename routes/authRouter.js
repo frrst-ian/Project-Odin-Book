@@ -39,7 +39,7 @@ authRouter.get(
                 { expiresIn: "7d" },
             );
 
-            res.redirect(`http://localhost:5173/auth/callback?token=${token}`);
+            res.redirect(`https://odinbookxd.netlify.app/auth/callback?token=${token}`);
         } catch (err) {
             console.error("JWT generation error:", err);
             res.status(500).json({ message: "Failed to generate token" });
