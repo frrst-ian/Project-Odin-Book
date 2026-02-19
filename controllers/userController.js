@@ -3,7 +3,6 @@ const db = require("../db/queries");
 async function getUserProfile(req, res) {
     try {
         if (req.user) {
-            console.log("User: ", req.user);
             return res.json(req.user);
         }
     } catch (err) {
