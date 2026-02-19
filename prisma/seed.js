@@ -11,7 +11,10 @@ async function main() {
     createdAt: faker.date.recent({days:20})
   }))
 
-  await prisma.user.createMany({ data: users })
+  for (const user of users) {
+    await prisma.user.create({ data: user })
+  }
+  
   console.log('Seeded 10 users')
 }
 
