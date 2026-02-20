@@ -64,7 +64,7 @@ passport.use(
         {
             clientID: process.env.GITHUB_CLIENT_ID,
             clientSecret: process.env.GITHUB_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/api/auth/github/callback",
+            callbackURL: "https://odinbookxd.netlify.app/api/auth/github/callback",
             scope: ["user:email"],
             customLogic: async (accessToken, profile) => {
                 const emailsResponse = await require("axios").get(
