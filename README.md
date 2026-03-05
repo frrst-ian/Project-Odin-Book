@@ -3,6 +3,7 @@
 A social media REST API built with Express.js, Prisma, PostgreSQL, and JWT auth. Supports local auth, GitHub OAuth2, and guest access.
 
 **Live demo:** [odinbookxd.netlify.app](https://odinbookxd.netlify.app) 
+
 **Frontend repo:** [github.com/frrst-ian/Odin-Book](https://github.com/frrst-ian/Odin-Book)
 
 ---
