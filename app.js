@@ -46,6 +46,10 @@ app.use("/api/u", userRouter);
 app.use("/api/p", postRouter);
 app.use("/api/f", followRouter);
 
+app.get("/api", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         return res.status(400).j(`File upload error: ${err.message}`);
